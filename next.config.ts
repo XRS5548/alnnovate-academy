@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
   images: {
     domains: [
       "images.unsplash.com",
-      "plus.unsplash.com", // <-- ye line add karo
+      "plus.unsplash.com",
+      "source.unsplash.com" // <-- ye line add karo
     ],
   },
 };

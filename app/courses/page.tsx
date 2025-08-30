@@ -53,114 +53,125 @@ import {
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import Image from "next/image";
 
 // ---- Mock Data (replace with API) --------------------------------------
 const MOCK_COURSES = [
-    {
-        id: "c1",
-        title: "Full‑Stack Web Development with Node.js & React",
-        category: "Web Development",
-        level: "Beginner",
-        language: "English",
-        lessons: 120,
-        durationHours: 38,
-        rating: 4.7,
-        learners: 12800,
-        price: 0,
-        tags: ["HTML", "CSS", "JavaScript", "MongoDB"],
-    },
-    {
-        id: "c2",
-        title: "Data Science Essentials with Python & Pandas",
-        category: "Data Science",
-        level: "Intermediate",
-        language: "English",
-        lessons: 96,
-        durationHours: 30,
-        rating: 4.6,
-        learners: 8600,
-        price: 1499,
-        tags: ["Python", "Pandas", "EDA", "Matplotlib"],
-    },
-    {
-        id: "c3",
-        title: "Android App Development with Kotlin",
-        category: "Mobile Development",
-        level: "Beginner",
-        language: "Hindi",
-        lessons: 85,
-        durationHours: 26,
-        rating: 4.5,
-        learners: 5400,
-        price: 0,
-        tags: ["Kotlin", "Android Studio", "UI"],
-    },
-    {
-        id: "c4",
-        title: "Mastering Next.js 15 for Production",
-        category: "Web Development",
-        level: "Advanced",
-        language: "English",
-        lessons: 75,
-        durationHours: 22,
-        rating: 4.8,
-        learners: 4100,
-        price: 1999,
-        tags: ["Next.js", "SSR", "Edge", "Auth"],
-    },
-    {
-        id: "c5",
-        title: "Intro to Machine Learning",
-        category: "Data Science",
-        level: "Beginner",
-        language: "English",
-        lessons: 60,
-        durationHours: 18,
-        rating: 4.4,
-        learners: 9800,
-        price: 0,
-        tags: ["ML", "scikit‑learn", "Supervised"],
-    },
-    {
-        id: "c6",
-        title: "Flutter from Zero to Hero",
-        category: "Mobile Development",
-        level: "Intermediate",
-        language: "English",
-        lessons: 110,
-        durationHours: 34,
-        rating: 4.6,
-        learners: 7700,
-        price: 1299,
-        tags: ["Flutter", "Dart", "State"],
-    },
-    {
-        id: "c7",
-        title: "Ethical Hacking Fundamentals",
-        category: "Cybersecurity",
-        level: "Beginner",
-        language: "English",
-        lessons: 70,
-        durationHours: 20,
-        rating: 4.3,
-        learners: 6200,
-        price: 0,
-        tags: ["Networking", "Linux", "Recon"],
-    },
-    {
-        id: "c8",
-        title: "DevOps with Docker & Kubernetes",
-        category: "DevOps",
-        level: "Advanced",
-        language: "English",
-        lessons: 88,
-        durationHours: 28,
-        rating: 4.7,
-        learners: 6900,
-        price: 1799,
-        tags: ["Docker", "K8s", "CI/CD"],
-    },
+  {
+    id: "c1",
+    title: "Full-Stack Web Development with Node.js & React",
+    category: "Web Development",
+    level: "Beginner",
+    language: "English",
+    lessons: 120,
+    durationHours: 38,
+    rating: 4.7,
+    learners: 12800,
+    price: 0,
+    tags: ["HTML", "CSS", "JavaScript", "MongoDB"],
+    image: "https://images.unsplash.com/photo-1621910226772-771f03fb0d9a?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    id: "c2",
+    title: "Data Science Essentials with Python & Pandas",
+    category: "Data Science",
+    level: "Intermediate",
+    language: "English",
+    lessons: 96,
+    durationHours: 30,
+    rating: 4.6,
+    learners: 8600,
+    price: 1499,
+    tags: ["Python", "Pandas", "EDA", "Matplotlib"],
+    image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    id: "c3",
+    title: "Android App Development with Kotlin",
+    category: "Mobile Development",
+    level: "Beginner",
+    language: "Hindi",
+    lessons: 85,
+    durationHours: 26,
+    rating: 4.5,
+    learners: 5400,
+    price: 0,
+    tags: ["Kotlin", "Android Studio", "UI"],
+    image: "https://images.unsplash.com/photo-1587574293340-e0011c4e8ecf?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    id: "c4",
+    title: "Mastering Next.js 15 for Production",
+    category: "Web Development",
+    level: "Advanced",
+    language: "English",
+    lessons: 75,
+    durationHours: 22,
+    rating: 4.8,
+    learners: 4100,
+    price: 1999,
+    tags: ["Next.js", "SSR", "Edge", "Auth"],
+    image: "https://images.unsplash.com/photo-1633356122102-47964a9a1f84?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    id: "c5",
+    title: "Intro to Machine Learning",
+    category: "Data Science",
+    level: "Beginner",
+    language: "English",
+    lessons: 60,
+    durationHours: 18,
+    rating: 4.4,
+    learners: 9800,
+    price: 0,
+    tags: ["ML", "scikit-learn", "Supervised"],
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    id: "c6",
+    title: "Flutter from Zero to Hero",
+    category: "Mobile Development",
+    level: "Intermediate",
+    language: "English",
+    lessons: 110,
+    durationHours: 34,
+    rating: 4.6,
+    learners: 7700,
+    price: 1299,
+    tags: ["Flutter", "Dart", "State"],
+    image: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    id: "c7",
+    title: "Ethical Hacking Fundamentals",
+    category: "Cybersecurity",
+    level: "Beginner",
+    language: "English",
+    lessons: 70,
+    durationHours: 20,
+    rating: 4.3,
+    learners: 6200,
+    price: 0,
+    tags: ["Networking", "Linux", "Recon"],
+    image: "https://images.unsplash.com/photo-1614064649858-1ec07bdb4d29?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    id: "c8",
+    title: "DevOps with Docker & Kubernetes",
+    category: "DevOps",
+    level: "Advanced",
+    language: "English",
+    lessons: 88,
+    durationHours: 28,
+    rating: 4.7,
+    learners: 6900,
+    price: 1799,
+    tags: ["Docker", "K8s", "CI/CD"],
+    image: "https://images.unsplash.com/photo-1612832021014-8e879f5c2958?auto=format&fit=crop&w=600&q=80",
+  },
 ];
+
+
 
 const CATEGORIES = [
     "All",
@@ -193,6 +204,7 @@ export interface Course {
     learners: number;
     price: number;
     tags: string[];
+    image: string;
 }
 
 
@@ -200,8 +212,15 @@ export interface Course {
 function CourseCard({ course, onPreview }: { course: Course; onPreview: (c: Course) => void }) {
     return (
         <motion.div layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <Card className="overflow-hidden group">
-                <div className={`relative aspect-video bg-muted ${shimmer}`} />
+            <Card className="overflow-hidden group relative">
+                <div className="relative w-full aspect-video">
+                    <Image
+                        src={course.image}
+                        alt={course.title}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                </div>
                 <CardHeader className="gap-1">
                     <div className="flex items-start justify-between gap-3">
                         <CardTitle className="text-lg leading-snug">{course.title}</CardTitle>
@@ -389,42 +408,67 @@ function FilterBar({
     );
 }
 
-function CoursePreview({ open, onOpenChange, course }: { open: boolean; onOpenChange: (o: boolean) => void; course: Course | null }) {
-    if (!course) return null;
-    return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-2xl">
-                <DialogHeader>
-                    <DialogTitle>{course.title}</DialogTitle>
-                    <DialogDescription>
-                        {course.category} • {course.level} • {course.language}
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4">
-                    <div className={`aspect-video rounded-2xl bg-muted ${shimmer}`} />
-                    <div className="flex flex-wrap gap-2">
-                        {course.tags.map((t: string) => (
-                            <Badge key={t} variant="outline" className="rounded-full">
-                                {t}
-                            </Badge>
-                        ))}
-                    </div>
-                    <div className="text-sm leading-relaxed">
-                        Kickstart your learning journey with hands‑on projects, quizzes, and downloadable resources. Replace this with the course overview fetched from API.
-                    </div>
-                </div>
-                <DialogFooter className="flex items-center justify-between">
-                    <div className="font-medium">{formatPrice(course.price)}</div>
-                    <div className="flex gap-2">
-                        <Button variant="outline">Add to Wishlist</Button>
-                        <Button>
-                            <GraduationCap className="mr-2 h-4 w-4" /> Enroll Now
-                        </Button>
-                    </div>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    );
+function CoursePreview({
+  open,
+  onOpenChange,
+  course,
+}: {
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+  course: Course | null;
+}) {
+  if (!course) return null;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>{course.title}</DialogTitle>
+          <DialogDescription>
+            {course.category} • {course.level} • {course.language}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          {/* Course Preview Image */}
+          <div className="relative aspect-video w-full overflow-hidden rounded-2xl">
+            <Image
+              src={course.image}
+              alt={course.title}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2">
+            {course.tags.map((t: string) => (
+              <Badge key={t} variant="outline" className="rounded-full">
+                {t}
+              </Badge>
+            ))}
+          </div>
+
+          {/* Description */}
+          <div className="text-sm leading-relaxed">
+            Kickstart your learning journey with hands-on projects, quizzes, and
+            downloadable resources. Replace this with the course overview fetched
+            from API.
+          </div>
+        </div>
+
+        <DialogFooter className="flex items-center justify-between">
+          <div className="font-medium">{formatPrice(course.price)}</div>
+          <div className="flex gap-2">
+            <Button variant="outline">Add to Wishlist</Button>
+            <Button>
+              <GraduationCap className="mr-2 h-4 w-4" /> Enroll Now
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 export default function CoursesPage() {
