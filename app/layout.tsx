@@ -36,7 +36,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <NextTopLoader />
+            <NextTopLoader 
+              color="orange"
+            />
             <Navbar />
             {children}
             <Footer />
