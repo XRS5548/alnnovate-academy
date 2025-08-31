@@ -1,16 +1,21 @@
-import React, { ReactNode } from 'react';
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_EMAIL_API);
-
-export function sendEmail({ to, template, subject }: { to: string; template: ReactNode; subject: string }) {
-    resend.emails.send({
-        from: 'onboarding@resend.dev',
+import nodemailer from 'nodemailer'
+export async function sendEmail({ to, template, subject }: { to: string; template: string; subject: string }) {
+    const transporter = nodemailer.createTransport({
+        service:"gmail",// true for 465, false for other ports
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASSWORD,
+        },
+    });
+    const info = await transporter.sendMail({
+        from: '"Alnnovate Academy" <alnnovateacademy@gmail.com>',
         to: to,
         subject: subject,
-        react: template
+        html: template, // HTML body
     });
-    return true;
+
+    console.log("Message sent:", info.messageId);
+    return info.messageId;
 }
 
 

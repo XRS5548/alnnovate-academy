@@ -54,7 +54,7 @@ export async function POST(req: Request) {
         // Send verification email
         const successmail = await sendEmail({
             to: email,
-            template: render( VerificationEmail({
+            template: await render( VerificationEmail({
                 firstName: fullName,
                 code: verificationCode
             })),
