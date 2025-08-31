@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -8,11 +8,28 @@ import { motion } from "framer-motion";
 export default function VerifyEmailBox({ email }: { email: string }) {
   const [values, setValues] = useState(Array(6).fill(""));
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [cooldown, setCooldown] = useState(0); // countdown seconds
   const [message, setMessage] = useState<string | null>(null);
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
+  // countdown logic
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
   const handleChange = (val: string, idx: number) => {
-    if (!/^[0-9]?$/.test(val)) return; // only digits
+    if (!/^[0-9]?$/.test(val)) return;
     const newValues = [...values];
     newValues[idx] = val;
     setValues(newValues);
@@ -57,6 +74,33 @@ export default function VerifyEmailBox({ email }: { email: string }) {
     }
   };
 
+  const handleResend = async () => {
+    setResending(true);
+    setMessage(null);
+
+    try {
+      const res = await fetch("/api/resendverification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage(data.message || "Verification email resent!");
+        setCooldown(30); // start 30s countdown
+      } else {
+        setMessage(data.message || "Failed to resend email. Try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("Something went wrong while resending.");
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -87,14 +131,36 @@ export default function VerifyEmailBox({ email }: { email: string }) {
         ))}
       </div>
 
-      <Button onClick={handleSubmit} disabled={values.join("").length < 6 || loading}>
-        {loading ? "Verifying..." : "Verify"}
-      </Button>
+      <div className="flex flex-col gap-3 w-full">
+        <Button
+          onClick={handleSubmit}
+          disabled={values.join("").length < 6 || loading}
+          className="w-full"
+        >
+          {loading ? "Verifying..." : "Verify"}
+        </Button>
+
+        <Button
+          onClick={handleResend}
+          variant="outline"
+          disabled={resending || cooldown > 0}
+          className="w-full"
+        >
+          {resending
+            ? "Resending..."
+            : cooldown > 0
+            ? `Resend in ${cooldown}s`
+            : "Resend Code"}
+        </Button>
+      </div>
 
       {message && (
         <p
-          className={`text-sm mt-2 ${
-            message.toLowerCase().includes("success") ? "text-green-600" : "text-red-600"
+          className={`text-sm mt-2 text-center ${
+            message.toLowerCase().includes("success") ||
+            message.toLowerCase().includes("resent")
+              ? "text-green-600"
+              : "text-red-600"
           }`}
         >
           {message}

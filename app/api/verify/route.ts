@@ -1,8 +1,8 @@
 // app/api/verify/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
         const { email, code } = await req.json();
 
@@ -46,6 +46,8 @@ export async function POST(req: Request) {
             { email },
             { $set: { verified: true }, $unset: { verificationCode: "" } }
         );
+
+        
 
         return NextResponse.json(
             { message: "User verified successfully" },
