@@ -147,7 +147,7 @@ export default function AlnnovateLoginPage({
                     Remember me
                   </Label>
                 </div>
-                <a className="text-sm underline" href="#">
+                <a className="text-sm underline" href="/forgotpass">
                   Forgot?
                 </a>
               </div>
