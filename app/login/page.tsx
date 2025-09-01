@@ -69,6 +69,8 @@ export default function AlnnovateLoginPage({
 
       if (!res.ok) {
         toast.error(data.message || "Invalid username or password");
+        toast.error(data.message || "Invalid username or password");
+
         return;
       }
 

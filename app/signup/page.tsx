@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Eye, EyeOff } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type SignupData = {
   fullName: string;
@@ -53,6 +54,7 @@ export default function AlnnovateSignupPage({ onSignup }: { onSignup?: (data: Si
     if (!validate()) return;
 
     setLoading(true);
+    toast.info("Please Wait ...")
     try {
       const res = await fetch("/api/signup", {
         method: "POST",
@@ -61,8 +63,10 @@ export default function AlnnovateSignupPage({ onSignup }: { onSignup?: (data: Si
       });
 
       if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.message || "Signup failed");
+        const errData = await res.json().catch(() => ({
+
+        }));
+        toast.error(errData.message || "Login failed: Please check your credentials.")
       }
 
       const data = await res.json();
@@ -78,6 +82,7 @@ export default function AlnnovateSignupPage({ onSignup }: { onSignup?: (data: Si
         role: "student",
         acceptTerms: false,
       });
+      toast.success("Login Successfull. please wait for Verification ...")
 
       // ✅ UX improvement: show success + redirect message before navigating
       setRedirecting(true);
