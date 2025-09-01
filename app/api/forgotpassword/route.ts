@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 import crypto from "crypto";
 import { sendEmail } from "@/lib/emailservice";
 import { render } from "@react-email/render";
-import { VerificationEmail } from "@/components/emails/verificationCodeEmail";
+import { ResetPasswordEmail, VerificationEmail } from "@/components/emails/verificationCodeEmail";
 
 // ⚡ MongoDB connection string
 const client = new MongoClient(process.env.MONGO_URL!);
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
     console.log("Generated OTP for", email, ":", otp);
     await sendEmail({
       to:email,
-      template:await render(VerificationEmail({
+      template:await render(ResetPasswordEmail({
         firstName:user.fullName,
         code:otp
       })),
