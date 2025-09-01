@@ -110,6 +110,8 @@ export default function VerifyEmailBox({ email }: { email: string }) {
       <h2 className="text-xl font-semibold">Verify your Email</h2>
       <p className="text-sm text-muted-foreground text-center">
         Enter the 6-digit verification code we sent to your email.
+        <br />
+        <strong>Note: Please check your spam folder as emails may sometimes go there.</strong>
       </p>
 
       <div className="flex gap-2">
