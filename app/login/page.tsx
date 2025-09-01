@@ -14,7 +14,10 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Twitter, Github, Mail } from "lucide-react";
+import { Twitter, Github } from "lucide-react";
+import { toast } from "sonner"; // ✅ import sonner
+import { useRouter } from "next/navigation";
+
 type LoginData = {
   email: string;
   password: string;
@@ -26,16 +29,16 @@ export default function AlnnovateLoginPage({
 }: {
   onLogin?: (data: LoginData) => void;
 }) {
+  const router = useRouter()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   function validate() {
     if (!email) return "Email/Phone is required";
-    // simple email-ish check
-    if (email.indexOf("@") === -1 && !/^\d{6,}$/.test(email)) return "Enter a valid email or phone";
+    if (email.indexOf("@") === -1 && !/^\d{6,}$/.test(email))
+      return "Enter a valid email or phone";
     if (!password) return "Password is required";
     if (password.length < 6) return "Password must be at least 6 characters";
     return null;
@@ -45,20 +48,49 @@ export default function AlnnovateLoginPage({
     e.preventDefault();
     const v = validate();
     if (v) {
-      setError(v);
+      toast.error(v);
       return;
     }
-    setError(null);
     setLoading(true);
+    toast.info("Please Wait")
+
     try {
-      // Default behavior: call onLogin prop or simulate an API call.
       const payload = { email, password, remember };
-      await new Promise((r) => setTimeout(r, 800));
+
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "Invalid username or password");
+        return;
+      }
+
+
+      // ✅ user info ko localStorage me save karna
+      if (data.success) {
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+        router.push("/dashboard")
+      }
+
       if (onLogin) onLogin(payload);
-      // For demo, just console.log
-      console.log("Logging in with", payload);
+
+
+      toast.success("Login successful 🎉");
+
+      console.log("Login success:", data);
+      // TODO: router.push("/dashboard");
+
     } catch (err) {
-      setError("Something went wrong. Try again.");
+      console.error("Login error:", err);
+      toast.error("Something went wrong. Try again.");
     } finally {
       setLoading(false);
     }
@@ -75,7 +107,9 @@ export default function AlnnovateLoginPage({
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Alnnovate Academy</CardTitle>
-            <CardDescription>Sign in to access courses, projects and your dashboard</CardDescription>
+            <CardDescription>
+              Sign in to access courses, projects and your dashboard
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -107,12 +141,14 @@ export default function AlnnovateLoginPage({
                     checked={remember}
                     onCheckedChange={(val) => setRemember(Boolean(val))}
                   />
-                  <Label htmlFor="remember" className="select-none">Remember me</Label>
+                  <Label htmlFor="remember" className="select-none">
+                    Remember me
+                  </Label>
                 </div>
-                <a className="text-sm underline" href="#">Forgot?</a>
+                <a className="text-sm underline" href="#">
+                  Forgot?
+                </a>
               </div>
-
-              {error && <p className="text-sm text-destructive">{error}</p>}
 
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Signing in..." : "Sign in"}
@@ -121,19 +157,36 @@ export default function AlnnovateLoginPage({
               <div className="pt-2">
                 <Separator />
                 <div className="flex items-center justify-center gap-3 pt-4">
-                  <Button variant="ghost" type="button" onClick={() => alert('Social login: GitHub')}>
+                  <Button
+                    variant="ghost"
+                    type="button"
+                    onClick={() => toast.info("GitHub login coming soon")}
+                  >
                     <Github size={16} />
-                    <span className="ml-2 hidden sm:inline">Continue with GitHub</span>
+                    <span className="ml-2 hidden sm:inline">
+                      Continue with GitHub
+                    </span>
                   </Button>
-                  <Button variant="ghost" type="button" onClick={() => alert('Social login: Twitter')}>
+                  <Button
+                    variant="ghost"
+                    type="button"
+                    onClick={() => toast.info("Twitter login coming soon")}
+                  >
                     <Twitter size={16} />
-                    <span className="ml-2 hidden sm:inline">Continue with Twitter</span>
+                    <span className="ml-2 hidden sm:inline">
+                      Continue with Twitter
+                    </span>
                   </Button>
                 </div>
               </div>
 
               <div className="pt-3 text-center">
-                <p className="text-sm">New to Alnnovate? <a className="underline" href="#">Create an account</a></p>
+                <p className="text-sm">
+                  New to Alnnovate?{" "}
+                  <a className="underline" href="#">
+                    Create an account
+                  </a>
+                </p>
               </div>
             </form>
           </CardContent>

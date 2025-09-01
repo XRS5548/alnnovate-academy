@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/persional/navbar";
 import Footer from "@/components/persional/footer";
 import NextTopLoader from 'nextjs-toploader';
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
      <html lang="en" suppressHydrationWarning>
         <head />
         <body>
+           <Toaster />
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
