@@ -18,6 +18,7 @@ interface Resource {
 interface Video {
   name: string;
   description: string;
+  url: string; // Added video URL field
   resources: Resource[];
 }
 
@@ -49,6 +50,7 @@ export default function AddCourseComponent() {
       {
         name: "",
         description: "",
+        url: "", // Added video URL field
         resources: [
           {
             name: "",
@@ -139,6 +141,7 @@ export default function AddCourseComponent() {
         {
           name: "",
           description: "",
+          url: "", // Added video URL field
           resources: [
             {
               name: "",
@@ -431,6 +434,17 @@ export default function AddCourseComponent() {
                         value={video.description}
                         onChange={(e) => handleVideoChange(videoIndex, 'description', e.target.value)}
                         rows={2}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor={`video-url-${videoIndex}`}>Video URL *</Label>
+                      <Input
+                        id={`video-url-${videoIndex}`}
+                        value={video.url}
+                        onChange={(e) => handleVideoChange(videoIndex, 'url', e.target.value)}
+                        type="url"
+                        required
                       />
                     </div>
 
