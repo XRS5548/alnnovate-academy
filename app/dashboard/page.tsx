@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import AddCourseComponent from "@/components/admin/createcourseUI";
 import DashboardCourses from "@/components/admin/dashboardcourses";
+import AddExam from "@/components/admin/addexam";
 
 export default function StudentDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -33,6 +34,11 @@ export default function StudentDashboard() {
     else if(activeTab == 'courses'){
       return (
         <DashboardCourses />
+      )
+    }
+     else if(activeTab == 'Add Exam'){
+      return (
+        <AddExam />
       )
     }
   };
@@ -53,6 +59,7 @@ export default function StudentDashboard() {
           <SidebarItem icon={<Home className="h-4 w-4" />} label="Dashboard" active={activeTab === 'overview'} onClick={() => setActiveTab('overview')}/>
           <SidebarItem icon={<PlusCircle className="h-4 w-4" />} label="Add Course" active={activeTab === 'Add Course'} onClick={() => setActiveTab('Add Course')}/>
           <SidebarItem icon={<BookOpen className="h-4 w-4" />} label="Courses" active={activeTab === 'courses'} onClick={() => setActiveTab('courses')} />
+          <SidebarItem icon={<PlusCircle className="h-4 w-4" />} label="Add Exam" active={activeTab === 'Add Exam'} onClick={() => setActiveTab('Add Exam')} />
           <SidebarItem icon={<ListChecks className="h-4 w-4" />} label="Exams" active={activeTab === 'Exams'} onClick={() => setActiveTab('Exams')} />
           <SidebarItem icon={<ListChecks className="h-4 w-4" />} label="assignments" active={activeTab === 'assignments'} onClick={() => setActiveTab('assignments')} />
           <SidebarItem icon={<Calendar className="h-4 w-4" />} label="Schedule" active={activeTab === 'schedule'} onClick={() => setActiveTab('schedule')} />
