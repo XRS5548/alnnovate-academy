@@ -78,8 +78,8 @@ export default function AboutPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {[
             { name: "Rohit Verma", role: "Founder & CEO" },
+            { name: "Saniya khan", role: "Founder & COO" },
             { name: "Ashish", role: "Co-Founder & CTO" },
-            { name: "Your Name Here", role: "Lead Instructor" },
           ].map((member, i) => (
             <Card key={i} className="rounded-2xl shadow-lg">
               <CardContent className="p-6">
