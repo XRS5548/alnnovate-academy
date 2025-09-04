@@ -132,7 +132,7 @@ export default function DashboardCourses() {
           <AlertDescription>
             {error}
           </AlertDescription>
-          <Button onClick={fetchMyCourses} className="mt-4">
+          <Button variant={'default'} onClick={fetchMyCourses} className="mt-4 px-20">
             Try Again
           </Button>
         </Alert>
