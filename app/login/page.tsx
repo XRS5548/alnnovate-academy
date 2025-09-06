@@ -78,8 +78,12 @@ export default function AlnnovateLoginPage({
       // ✅ user info ko localStorage me save karna
       if (data.success) {
 
-        localStorage.setItem("user", JSON.stringify(data.user));
-        router.push("/dashboard")
+         if(remember) localStorage.setItem("user", JSON.stringify(data.user));
+        else sessionStorage.setItem("user", JSON.stringify(data.user))
+        router.refresh()
+        setTimeout(() => {
+          router.push("/dashboard")
+        }, 100);
       }
 
       if (onLogin) onLogin(payload);

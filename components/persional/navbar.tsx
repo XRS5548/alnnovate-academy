@@ -12,18 +12,36 @@ import {
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
+  const router = useRouter();
 
   const [scrolled, setScrolled] = React.useState(false);
+  const [user, setUser] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Check if user is logged in on mount
+  React.useEffect(() => {
+    const storedUser =
+      localStorage.getItem("user") || sessionStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
+    setUser(null);
+    
+    router.push("/api/logout"); // redirect to home after logout
+  };
 
   return (
     <motion.header
@@ -37,8 +55,12 @@ export default function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2 group">
-          {/* <GraduationCap className="h-7 w-7 group-hover:rotate-12 transition-transform duration-300" /> */}
-          <Image alt="logo alnnovate Academy"  src={'/logo.png'} width={50} height={50} />
+          <Image
+            alt="logo alnnovate Academy"
+            src={"/logo.png"}
+            width={50}
+            height={50}
+          />
           <span className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors">
             Alnnovate Academy
           </span>
@@ -92,12 +114,25 @@ export default function Navbar() {
             </AnimatePresence>
           </Button>
 
-          <Button variant="outline" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/signup">Sign Up</Link>
-          </Button>
+          {user ? (
+            <>
+              <Button asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+              <Button variant="outline" onClick={handleLogout}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="outline" asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/signup">Sign Up</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu */}
@@ -130,12 +165,29 @@ export default function Navbar() {
               </Button>
 
               <div className="flex flex-col space-y-3 pt-6 border-t">
-                <Button variant="outline" asChild className="w-full">
-                  <Link href="/login">Login</Link>
-                </Button>
-                <Button asChild className="w-full">
-                  <Link href="/signup">Sign Up</Link>
-                </Button>
+                {user ? (
+                  <>
+                    <Button asChild className="w-full">
+                      <Link href="/dashboard">Dashboard</Link>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="outline" asChild className="w-full">
+                      <Link href="/login">Login</Link>
+                    </Button>
+                    <Button asChild className="w-full">
+                      <Link href="/signup">Sign Up</Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </SheetContent>
