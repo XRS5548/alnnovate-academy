@@ -13,11 +13,14 @@ import {
   Share2,
   Menu,
   X,
+  ArrowUpRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
+import ReactPlayer from "react-player";
+import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface Resource {
   name: string;
@@ -30,7 +33,12 @@ interface Video {
   url: string;
   resources: Resource[];
 }
-
+interface OnProgressProps {
+  played: number;        // 0–1 (fraction played)
+  playedSeconds: number; // seconds
+  loaded: number;        // 0–1 (fraction loaded)
+  loadedSeconds: number; // seconds
+}
 interface Course {
   id: string;
   title: string;
@@ -56,7 +64,7 @@ export default function CoursePlayer() {
         const res = await fetch(`/api/playcourse/${id}`);
         if (!res.ok) throw new Error("Failed to fetch course");
         const data: Course = await res.json();
-        setCourse(data); // ✅ direct set karo
+        setCourse(data);
       } catch (err) {
         console.error("❌ Error fetching course:", err);
       } finally {
@@ -78,18 +86,7 @@ export default function CoursePlayer() {
     setCurrentVideo(index);
     setIsPlaying(true);
     setProgress(0);
-  };
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
+  }
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
@@ -135,11 +132,10 @@ export default function CoursePlayer() {
                 {course.videos.map((video, index) => (
                   <div
                     key={index}
-                    className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                      currentVideo === index
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-muted"
-                    }`}
+                    className={`p-3 rounded-lg cursor-pointer transition-colors ${currentVideo === index
+                      ? "bg-primary text-primary-foreground"
+                      : "hover:bg-muted"
+                      }`}
                     onClick={() => handleVideoSelect(index)}
                   >
                     <div className="flex items-start gap-3">
@@ -166,22 +162,64 @@ export default function CoursePlayer() {
 
         {/* Main Content */}
         <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Video Player */}
-          <div className="relative aspect-video bg-black flex items-center justify-center text-white">
-            <p>Now Playing: {course.videos[currentVideo].name}</p>
+          {/* ✅ React Player integrated */}
+          <div className="relative aspect-video bg-black">
+            <ReactPlayer
+              key={currentVideo}
+              src={course.videos[currentVideo].url}
+              playing={isPlaying}
+              controls
+              width="100%"
+              height="100%"
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
+            />
           </div>
+
+
+
 
           {/* Video Info */}
           <div className="p-6 overflow-y-auto">
             <h2 className="text-2xl font-bold mb-2">
               {currentVideo + 1}. {course.videos[currentVideo].name}
             </h2>
-            <p className="text-muted-foreground">
-              Instructor: {course.instructor ?? "Unknown"}
-            </p>
+
             <Separator className="my-4" />
             <p>{course.videos[currentVideo].description}</p>
           </div>
+
+          {(course.videos[currentVideo].resources.length > 1 )?<Table>
+            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Name</TableHead>
+                <TableHead>Url</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {course.videos[currentVideo].resources.map((res) => (
+                <TableRow key={res.url}>
+                  <TableCell className="font-medium">{res.name}</TableCell>
+                  <TableCell><a href={res.url} target="_blank"><ArrowUpRight/> Open</a></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={3}>Total</TableCell>
+                <TableCell className="text-right">{course.videos[currentVideo].resources.length}</TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+          :<p className="text-center bg-secondary p-20">No any resources</p>
+            }
+
+          {/* {course.videos[currentVideo].resources.map(res=>{
+            return 
+          })} */}
+
+
         </main>
       </div>
     </div>
