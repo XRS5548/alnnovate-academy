@@ -8,9 +8,17 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function AddExam() {
+  // Exam Details
+  const [examName, setExamName] = useState("")
+  const [examDuration, setExamDuration] = useState("")
+  const [examFee, setExamFee] = useState("")
+  const [examThumbnail, setExamThumbnail] = useState("")
+
+  // Questions
   const [mcqs, setMcqs] = useState<{ question: string; options: string[]; marks: string }[]>([])
   const [longQuestions, setLongQuestions] = useState<{ question: string; marks: string }[]>([])
   const [codingProblems, setCodingProblems] = useState<{ problem: string; marks: string }[]>([])
+  const [publishing, setPublishing] = useState<boolean>(false)
 
   const [mcq, setMcq] = useState({ question: "", options: ["", "", "", ""], marks: "" })
   const [longQ, setLongQ] = useState({ question: "", marks: "" })
@@ -41,7 +49,17 @@ export default function AddExam() {
 
   // Publish Exam
   const publishExam = async () => {
-    const examData = { mcqs, longQuestions, codingProblems }
+    if (publishing) return
+    setPublishing(true)
+    const examData = {
+      name: examName,
+      duration: examDuration,
+      fee: examFee,
+      thumbnail: examThumbnail,
+      mcqs,
+      longQuestions,
+      codingProblems,
+    }
     try {
       const res = await fetch("/api/addexam", {
         method: "POST",
@@ -56,12 +74,22 @@ export default function AddExam() {
     } catch (err) {
       console.error(err)
       alert("Error publishing exam.")
+    } finally {
+      setPublishing(false)
     }
   }
 
   // Download JSON
   const downloadJSON = () => {
-    const examData = { mcqs, longQuestions, codingProblems }
+    const examData = {
+      name: examName,
+      duration: examDuration,
+      fee: examFee,
+      thumbnail: examThumbnail,
+      mcqs,
+      longQuestions,
+      codingProblems,
+    }
     const blob = new Blob([JSON.stringify(examData, null, 2)], { type: "application/json" })
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
@@ -80,6 +108,10 @@ export default function AddExam() {
       try {
         const data = JSON.parse(event.target?.result as string)
         if (data.mcqs && data.longQuestions && data.codingProblems) {
+          setExamName(data.name || "")
+          setExamDuration(data.duration || "")
+          setExamFee(data.fee || "")
+          setExamThumbnail(data.thumbnail || "")
           setMcqs(data.mcqs)
           setLongQuestions(data.longQuestions)
           setCodingProblems(data.codingProblems)
@@ -101,20 +133,28 @@ export default function AddExam() {
         <div className="text-sm font-medium">Total Questions: {totalQuestions}</div>
       </CardHeader>
       <CardContent>
-        {/* Action Buttons */}
-        <div className="flex gap-3 mb-5">
-          <Button onClick={publishExam}>Publish</Button>
-          <Button variant="outline" onClick={downloadJSON}>Download JSON</Button>
-          <div>
-            <Input type="file" accept="application/json" onChange={importJSON} />
-          </div>
+
+        {/* Exam Basic Details */}
+        <div className="grid gap-3 mb-6">
+          <Input placeholder="Exam Name" value={examName} onChange={(e) => setExamName(e.target.value)} />
+          <Input type="text" placeholder="Exam Duration (e.g. 90 mins)" value={examDuration} onChange={(e) => setExamDuration(e.target.value)} />
+          <Input type="number" placeholder="Exam Fee (₹)" value={examFee} onChange={(e) => setExamFee(e.target.value)} />
+          <Input type="text" placeholder="Exam Thumbnail URL" value={examThumbnail} onChange={(e) => setExamThumbnail(e.target.value)} />
         </div>
 
+        {/* Action Buttons */}
+        <div className="flex gap-3 mb-5">
+          <Button onClick={publishExam}>{publishing ? "Publishing..." : "Publish"}</Button>
+          <Button variant="outline" onClick={downloadJSON}>Download JSON</Button>
+          <Input type="file" accept="application/json" onChange={importJSON} />
+        </div>
+
+        {/* Tabs for Questions */}
         <Tabs defaultValue="mcq" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="mcq">MCQ</TabsTrigger>
             <TabsTrigger value="long">Long Questions</TabsTrigger>
-            <TabsTrigger value="coding">Coding Problem</TabsTrigger>
+            <TabsTrigger value="coding">Coding Problems</TabsTrigger>
           </TabsList>
 
           {/* MCQ TAB */}

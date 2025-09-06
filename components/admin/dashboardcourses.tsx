@@ -151,7 +151,7 @@ export default function DashboardCourses() {
               Get started by creating your first course and sharing your knowledge with others.
             </CardDescription>
             <Button asChild>
-              <Link href="/courses/create">
+              <Link href="/dashboard/add-course">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Create Your First Course
               </Link>

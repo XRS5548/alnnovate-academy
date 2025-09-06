@@ -20,6 +20,7 @@ import { Separator } from "@/components/ui/separator";
 import AddCourseComponent from "@/components/admin/createcourseUI";
 import DashboardCourses from "@/components/admin/dashboardcourses";
 import AddExam from "@/components/admin/addexam";
+import MyExams from "@/components/admin/myexam";
 
 export default function StudentDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -39,6 +40,11 @@ export default function StudentDashboard() {
      else if(activeTab == 'Add Exam'){
       return (
         <AddExam />
+      )
+    }
+     else if(activeTab == 'Exams'){
+      return (
+        <MyExams />
       )
     }
   };
