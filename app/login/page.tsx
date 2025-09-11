@@ -80,7 +80,7 @@ export default function AlnnovateLoginPage({
 
          if(remember) localStorage.setItem("user", JSON.stringify(data.user));
         else sessionStorage.setItem("user", JSON.stringify(data.user))
-        router.refresh()
+        router.replace('/dashboard')
         setTimeout(() => {
           router.push("/dashboard")
         }, 100);

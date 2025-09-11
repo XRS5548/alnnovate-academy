@@ -1,4 +1,5 @@
 import AboutUs from '@/components/persional/about'
+import ExamsList from '@/components/persional/examssection'
 import FeaturesSection from '@/components/persional/features'
 import HeroSection from '@/components/persional/hero'
 import PopularCourses from '@/components/persional/populercourse'
@@ -10,6 +11,7 @@ export default function page() {
     <>
       <HeroSection />
       <FeaturesSection />
+      <ExamsList />
       <PopularCourses />
       <AboutUs />
       <CertificatePreviewForm />

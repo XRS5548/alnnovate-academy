@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BookOpen,
   Calendar,
@@ -24,6 +24,10 @@ import MyExams from "@/components/admin/myexam";
 
 export default function StudentDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+
+  useEffect(()=>{
+    window.location.replace("/dashboard/overview")
+  },[])
 
   // Function to render content based on active tab
   const renderContent = () => {
