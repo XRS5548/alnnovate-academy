@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface Exam {
   _id: string;
@@ -18,6 +19,7 @@ interface Exam {
 export default function ExamsList() {
   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchExams() {
@@ -104,7 +106,7 @@ export default function ExamsList() {
                   <p className="text-sm font-medium text-primary mb-4">
                     {exam.fee === "0" ? "Free" : `₹${exam.fee}`}
                   </p>
-                  <Button className="w-full">Start Exam</Button>
+                  <Button className="w-full" onClick={()=>router.push('/exam-detail/'+exam._id)}>View Details</Button>
                 </div>
               </motion.div>
             ))}
